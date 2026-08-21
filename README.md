@@ -66,6 +66,16 @@ Once the containers are successfully running, you can access the services at:
 3. The **Reconstruction Error** is calculated (Mean Squared Error).
 4. If the error exceeds the predefined **Threshold**, the traffic is flagged as an **Attack 🚨**. Otherwise, it is classified as **Normal Traffic ✅**.
 
+## 📊 Model Performance & Evaluation
+
+The Autoencoder model was tracked and evaluated using **Weights & Biases (W&B)**. The training process shows a stable convergence with no overfitting.
+
+- **ROC AUC Score:** `~0.81` (Solid baseline for Unsupervised Anomaly Detection)
+- **Training Loss:** Reached optimal minimum (`2e-05`)
+- **Validation Loss:** Stabilized consistently (`0.00075`)
+
+![Model Evaluation & W&B Metrics](assets/model_performance.png)
+
 ## 🛑 Stopping the Application
 To stop the running containers, simply press CTRL+C in your terminal, or run:
     docker compose down
