@@ -72,4 +72,4 @@ To stop the running containers, simply press CTRL+C in your terminal, or run:
 
 ## 👨‍💻 Author
 
-Developed by **[Your Name/Username]** - Cybersecurity & AI Enthusiast.
+Developed by **Djilali** - Cybersecurity & AI Enthusiast.
