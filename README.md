@@ -1,85 +1,51 @@
 # 🛡️ AI-Powered Intrusion Detection System (IDS)
 
-An intelligent, full-stack Network Intrusion Detection System based on Deep Learning (Autoencoder). This system monitors network traffic features and detects anomalies (Zero-day attacks) by calculating reconstruction errors in real-time.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?logo=pytorch&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=black)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
-## 🚀 Features
-
-- **Deep Learning Model:** Unsupervised Autoencoder built with TensorFlow/Keras to detect anomalous network patterns.
-- **Fast Backend API:** High-performance RESTful API built with FastAPI.
-- **Interactive Modern UI:** Responsive, animated frontend built with React, Vite, Tailwind CSS, and Framer Motion.
-- **Dockerized Infrastructure:** Fully containerized using Docker and Docker Compose for seamless deployment across any environment.
-- **Real-time Simulation:** Simulate both Normal Traffic (Benign) and Cyber Attacks directly from the UI.
-
-## 🛠️ Tech Stack
-
-**Front-end:**
-- React (Vite)
-- Tailwind CSS
-- Framer Motion
-- Axios
-
-**Back-end & AI:**
-- Python 3.10
-- FastAPI & Uvicorn
-- TensorFlow / Keras
-- Scikit-learn & NumPy
-- Weights & Biases (W&B) for model tracking
-
-## 📁 Project Structure
-
-    AI-Powered-IDS/
-    ├── back-end/
-    │   ├── main.py                  # FastAPI server and prediction logic
-    │   ├── autoencoder.weights.h5   # Trained model weights
-    │   ├── requirements.txt         # Python dependencies
-    │   └── Dockerfile               # Backend container configuration
-    ├── front-end/
-    │   ├── src/                     # React components and assets
-    │   ├── package.json             # Node.js dependencies
-    │   ├── vite.config.js           # Vite configuration
-    │   └── Dockerfile               # Frontend container (Nginx) configuration
-    ├── train_model.py               # Deep Learning model training script
-    └── docker-compose.yml           # Multi-container orchestration
-
-## ⚙️ Quick Start (Running Locally)
-
-### Prerequisites
-Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed on your machine.
-
-### 1. Clone the repository
-    git clone https://github.com/YOUR_USERNAME/AI-Powered-IDS.git
-    cd AI-Powered-IDS
-
-### 2. Build and run with Docker Compose
-Simply run the following command in the root directory:
-    docker compose up --build
-
-### 3. Access the Application
-Once the containers are successfully running, you can access the services at:
-- **Frontend UI:** http://localhost:3000
-- **Backend API Docs (Swagger):** http://localhost:8000/docs
+A Proof of Concept (PoC) for a Network Intrusion Detection System using an unsupervised Deep Learning approach. This project was developed as a complementary study during an immersion internship at **Algérie Télécom**, exploring proactive security measures for modern telecommunication infrastructures (like FTTH networks).
 
 ## 🧠 How it Works
 
-1. The frontend sends simulated network packet features (78 dimensions) to the FastAPI backend.
-2. The Autoencoder attempts to reconstruct the input data.
-3. The **Reconstruction Error** is calculated (Mean Squared Error).
-4. If the error exceeds the predefined **Threshold**, the traffic is flagged as an **Attack 🚨**. Otherwise, it is classified as **Normal Traffic ✅**.
+Unlike traditional signature-based detection, this system uses an **Autoencoder** built with **PyTorch**. 
+1. The model is trained exclusively on **Normal (Benign)** network traffic.
+2. It learns to compress (encode) and reconstruct (decode) the 78 network features.
+3. When fed with new traffic, a high **Mean Squared Error (MSE)** indicates an anomaly (Zero-Day Attack).
 
-## 📊 Model Performance & Evaluation
+## 🚀 Features
 
-The Autoencoder model was tracked and evaluated using **Weights & Biases (W&B)**. The training process shows a stable convergence with no overfitting.
+* **Unsupervised Learning:** Capable of detecting unknown (Zero-Day) attacks without needing labeled attack data during training.
+* **Real-time API:** A fast and lightweight backend powered by FastAPI.
+* **Interactive Dashboard:** A modern UI built with React and Tailwind CSS to simulate and monitor network traffic.
+* **Fully Containerized:** Easy to deploy and run anywhere using Docker.
 
-- **ROC AUC Score:** `~0.81` (Solid baseline for Unsupervised Anomaly Detection)
-- **Training Loss:** Reached optimal minimum (`2e-05`)
-- **Validation Loss:** Stabilized consistently (`0.00075`)
+## 📊 Model Performance
 
-![Model Evaluation & W&B Metrics](assets/model_performance.png)
+The training process and metrics were tracked using **Weights & Biases (W&B)**. The model converged quickly and achieved a **ROC AUC Score of ~0.80** on the test dataset.
 
-## 🛑 Stopping the Application
-To stop the running containers, simply press CTRL+C in your terminal, or run:
-    docker compose down
+![Model Performance](./assets/model_performance.png)
+> *Training loss curve showing the rapid convergence of the Autoencoder.*
 
-## 👨‍💻 Author
+## 🛠️ Tech Stack
 
-Developed by **Djilali** - Cybersecurity & AI Enthusiast.
+* **Machine Learning:** PyTorch, Scikit-learn, Pandas, W&B
+* **Backend:** FastAPI, Uvicorn, Python 3.10
+* **Frontend:** React, Vite, TailwindCSS, Framer Motion
+* **DevOps:** Docker, Docker Compose
+
+## 🐳 Getting Started
+
+You can run the entire system (Frontend + Backend) with a single command using Docker.
+
+### Prerequisites
+* [Docker](https://www.docker.com/) and Docker Compose installed on your machine.
+
+### Installation & Run
+
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/your-username/ai-powered-ids.git](https://github.com/your-username/ai-powered-ids.git)
+   cd ai-powered-ids
