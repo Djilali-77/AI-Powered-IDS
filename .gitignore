@@ -1,0 +1,14 @@
+# Environments and Logs
+venv/
+wandb/
+
+# Node / Frontend
+node_modules/
+
+# Python Cache
+__pycache__/
+
+# Data and Models
+dataset/
+*.pth
+*.pkl
