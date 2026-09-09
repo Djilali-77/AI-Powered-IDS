@@ -27,6 +27,7 @@ Unlike traditional signature-based detection, this system uses an **Autoencoder*
 The training process and metrics were tracked using **Weights & Biases (W&B)**. The model converged quickly and achieved a **ROC AUC Score of ~0.80** on the test dataset.
 
 ![Model Performance](./assets/model_performance.png)
+
 > *Training loss curve showing the rapid convergence of the Autoencoder.*
 
 ## 🛠️ Tech Stack
@@ -45,7 +46,25 @@ You can run the entire system (Frontend + Backend) with a single command using D
 
 ### Installation & Run
 
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/your-username/ai-powered-ids.git](https://github.com/your-username/ai-powered-ids.git)
-   cd ai-powered-ids
+**Step 1:** Clone the repository
+```bash
+git clone https://github.com/your-username/ai-powered-ids.git
+cd ai-powered-ids
+```
+
+**Step 2:** Build and start the containers
+```bash
+docker-compose up --build -d
+```
+
+**Step 3:** Access the applications
+* **Frontend Dashboard:** http://localhost:3000
+* **Backend API Docs (Swagger):** http://localhost:8000/docs
+
+## 🛑 Stopping the containers
+```bash
+docker-compose down
+```
+
+## 📝 License
+This project is for academic and demonstration purposes.
