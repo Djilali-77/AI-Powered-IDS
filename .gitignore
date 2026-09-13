@@ -7,8 +7,13 @@ node_modules/
 
 # Python Cache
 __pycache__/
+*/__pycache__/
 
 # Data and Models
 dataset/
 *.pth
 *.pkl
+
+# === EXCEPTIONS (Fichiers autorisés pour Render) ===
+!back-end/autoencoder.pth
+!back-end/scaler.pkl
