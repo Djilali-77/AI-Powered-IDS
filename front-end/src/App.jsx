@@ -11,14 +11,21 @@ export default function App() {
   const handleTestTraffic = async (isAttack) => {
     setLoading(true);
 
-    const benignTraffic = new Array(78).fill(0).map((_, i) => {
-      return (i % 5 === 0) ? 0.05 : 0.01; 
+    // 🟢 BENIGN: Random small values to simulate normal fluctuating traffic
+    const benignTraffic = new Array(78).fill(0).map(() => {
+      // Generates a random number between 0.01 and 0.08
+      return (Math.random() * 0.07) + 0.01; 
     });
 
+    // 🚨 ATTACK: Normal background noise + random massive spikes
     const attackTraffic = new Array(78).fill(0).map((_, i) => {
-      if (i === 12 || i === 34 || i === 56) return 4.5;
-      if (i % 7 === 0) return 2.8;
-      return 0.1;
+      // Create random large spikes for specific features to trigger the anomaly
+      if (i === 12 || i === 34 || i === 56 || i % 7 === 0) {
+        // Generates a random high spike between 2.5 and 5.5
+        return (Math.random() * 3) + 2.5; 
+      }
+      // General background noise for attack (between 0.1 and 0.3)
+      return (Math.random() * 0.2) + 0.1;
     });
 
     const payloadFeatures = isAttack ? attackTraffic : benignTraffic;
@@ -39,9 +46,7 @@ export default function App() {
   };
 
   return (
-    // Changed padding (p-4 instead of p-6) for better mobile display
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6">
-      {/* Changed inner padding (p-5 on mobile, sm:p-8 on desktop) */}
       <div className="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl">
         <Header />
         <ActionButtons onTest={handleTestTraffic} loading={loading} />
