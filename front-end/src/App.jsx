@@ -39,8 +39,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-6">
-      <div className="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+    // Changed padding (p-4 instead of p-6) for better mobile display
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6">
+      {/* Changed inner padding (p-5 on mobile, sm:p-8 on desktop) */}
+      <div className="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl">
         <Header />
         <ActionButtons onTest={handleTestTraffic} loading={loading} />
         <ResultCard result={result} />
