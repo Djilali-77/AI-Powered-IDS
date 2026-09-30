@@ -66,31 +66,31 @@ export default function App() {
         <ActionButtons onTest={handleTestTraffic} loading={loading} />
         
         {/* === SECTION DE CHARGEMENT AMÉLIORÉE === */}
+        {/* === NOUVELLE SECTION DE CHARGEMENT (SCANNER HORIZONTAL) === */}
         {loading && (
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center py-8"
           >
-            {/* Animation type Radar/Scanner */}
-            <div className="relative flex justify-center items-center w-16 h-16 mb-6">
-              <motion.div 
-                animate={{ scale: [1, 1.5, 2], opacity: [1, 0.5, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
-                className="absolute w-full h-full bg-indigo-500 rounded-full"
+            {/* Nouvelle animation : Barre de scan réseau */}
+            <div className="w-48 h-1.5 bg-slate-800 rounded-full mb-6 overflow-hidden relative shadow-inner">
+              <motion.div
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                className="w-1/2 h-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent absolute top-0 left-0"
               />
-              <div className="relative w-4 h-4 bg-indigo-400 rounded-full shadow-[0_0_15px_rgba(129,140,248,0.8)]"></div>
             </div>
 
             {/* Texte dynamique */}
             <h3 className="text-lg font-semibold text-slate-200 mb-2">
-              {isWakingUp ? "Réveil de l'IA en cours..." : "Analyse du trafic..."}
+              {isWakingUp ? "Réveil du serveur AI..." : "Analyse des paquets..."}
             </h3>
             
             <p className="text-sm text-slate-400 text-center max-w-sm">
               {isWakingUp 
-                ? "Le serveur gratuit (Render) redémarre suite à une période d'inactivité. Cela peut prendre environ 50 secondes. Merci de patienter ! ☕" 
-                : "Le modèle PyTorch inspecte les 78 caractéristiques réseau en temps réel."}
+                ? "Le backend gratuit sort de veille. Cela prend environ 50 secondes. Merci de patienter !" 
+                : "Inspection des 78 features du trafic via l'Autoencoder."}
             </p>
           </motion.div>
         )}
