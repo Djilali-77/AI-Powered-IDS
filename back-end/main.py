@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 import joblib
 import json
+import numpy as np
 
 app = FastAPI(title="AI-Powered IDS API (PyTorch)")
 
@@ -89,3 +90,16 @@ def predict_traffic(data: TrafficData):
 @app.get("/")
 def home():
     return {"message": "PyTorch IDS Backend is running smoothly!"}
+
+
+
+@app.get("/wakeup")
+def wakeup_model():
+    try:
+        dummy_data = np.zeros((1, 78)) 
+        
+        autoencoder.predict(dummy_data)
+        
+        return {"status": "success", "message": "Serever is ready !"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
