@@ -48,7 +48,7 @@ You can run the entire system (Frontend + Backend) with a single command using D
 
 **Step 1:** Clone the repository
 ```bash
-git clone https://github.com/your-username/ai-powered-ids.git
+git clone https://github.com/Djilali-77/AI-Powered-IDS.git
 cd ai-powered-ids
 ```
 
