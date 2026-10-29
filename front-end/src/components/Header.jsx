@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export default function Header() {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="text-center mb-6 sm:mb-8"
@@ -11,7 +11,7 @@ export default function Header() {
         AI-Powered Intrusion Detection System
       </h1>
       <p className="text-sm sm:text-base text-slate-400 px-2 sm:px-0">
-        Système de surveillance réseau intelligent basé sur un Autoencoder (Deep Learning).
+        Unsupervised network anomaly detection with a PyTorch autoencoder, tested on real CICIDS2017 traffic.
       </p>
     </motion.div>
   );
