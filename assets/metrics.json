@@ -1,0 +1,71 @@
+{
+  "autoencoder": {
+    "roc_auc": 0.9387382596327299,
+    "average_precision": 0.8219824986999424,
+    "precision": 0.8895835384463916,
+    "recall": 0.6366914079015361,
+    "f1": 0.7421863234992128,
+    "false_positive_rate": 0.016059205941595944
+  },
+  "isolation_forest": {
+    "roc_auc": 0.860963688073616
+  },
+  "per_attack_type": {
+    "Bot": {
+      "count": 384,
+      "detection_rate": 0.0234375
+    },
+    "DDoS": {
+      "count": 25632,
+      "detection_rate": 0.8311095505617978
+    },
+    "DoS GoldenEye": {
+      "count": 1968,
+      "detection_rate": 0.33790650406504064
+    },
+    "DoS Hulk": {
+      "count": 34681,
+      "detection_rate": 0.8894207202791153
+    },
+    "DoS Slowhttptest": {
+      "count": 986,
+      "detection_rate": 0.3174442190669371
+    },
+    "DoS slowloris": {
+      "count": 1101,
+      "detection_rate": 0.6112624886466849
+    },
+    "FTP-Patator": {
+      "count": 1129,
+      "detection_rate": 0.008857395925597875
+    },
+    "Heartbleed": {
+      "count": 3,
+      "detection_rate": 1.0
+    },
+    "Infiltration": {
+      "count": 6,
+      "detection_rate": 1.0
+    },
+    "PortScan": {
+      "count": 18186,
+      "detection_rate": 0.020290333223358627
+    },
+    "SSH-Patator": {
+      "count": 635,
+      "detection_rate": 0.0
+    },
+    "Web Attack \ufffd Brute Force": {
+      "count": 313,
+      "detection_rate": 0.04153354632587859
+    },
+    "Web Attack \ufffd Sql Injection": {
+      "count": 5,
+      "detection_rate": 0.0
+    },
+    "Web Attack \ufffd XSS": {
+      "count": 119,
+      "detection_rate": 0.025210084033613446
+    }
+  }
+}

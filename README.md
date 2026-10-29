@@ -6,65 +6,142 @@
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=black)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
-A Proof of Concept (PoC) for a Network Intrusion Detection System using an unsupervised Deep Learning approach. This project was developed as a complementary study during an immersion internship at **Algérie Télécom**, exploring proactive security measures for modern telecommunication infrastructures (like FTTH networks).
+An unsupervised network intrusion detection system built around a PyTorch **autoencoder**. It was developed as a complementary study during an immersion internship at **Algérie Télécom**, exploring proactive security for modern telecom infrastructures (e.g. FTTH networks).
 
-## 🧠 How it Works
+<!-- Add your live demo link here -->
+<!-- **Live demo:** https://your-demo-url -->
 
-Unlike traditional signature-based detection, this system uses an **Autoencoder** built with **PyTorch**. 
-1. The model is trained exclusively on **Normal (Benign)** network traffic.
-2. It learns to compress (encode) and reconstruct (decode) the 78 network features.
-3. When fed with new traffic, a high **Mean Squared Error (MSE)** indicates an anomaly (Zero-Day Attack).
+## 🧠 How it works
+
+```mermaid
+flowchart LR
+    A[Raw flow features] --> B[Signed log1p]
+    B --> C[MinMax scaler<br/>fit on benign train only]
+    C --> D[Autoencoder]
+    D --> E[Reconstruction error MSE]
+    E --> F{error >= threshold?}
+    F -- yes --> G[Attack 🚨]
+    F -- no --> H[Normal ✅]
+```
+
+1. The autoencoder is trained **only on benign traffic**, so it learns what "normal" looks like.
+2. Anomalous flows are reconstructed poorly, which produces a high **mean squared error**.
+3. The alert threshold is **calibrated on a separate validation set** (best F1), never on the test set.
+
+## 🔬 Methodology
+
+* **Dataset:** CICIDS2017 (78 flow features). After cleaning: 2,520,798 flows, about 83% benign and 17% attacks.
+* **Cleaning:** inf/NaN rows and exact duplicates removed (duplicates would leak across splits).
+* **Preprocessing:** signed `log1p` to tame heavy-tailed features, then MinMax scaling fitted on benign *training* rows only (no data leakage).
+* **Splits:** stratified train / validation / test (60 / 20 / 20). The test set (504,160 flows) is used once, for the final evaluation.
+* **Model:** fully connected autoencoder, 78 → 64 → 16 → 64 → 78, trained on benign flows only (up to 100 epochs, early stopping, best-validation checkpoint).
+* **Threshold:** the value that maximizes F1 on the validation set (4.06e-4).
+* **Baseline:** Isolation Forest, so the autoencoder is compared against something.
+
+## 📊 Results (test set)
+
+| Model            | ROC AUC | Precision | Recall | F1    | False positive rate |
+|------------------|---------|-----------|--------|-------|---------------------|
+| Autoencoder      | 0.939   | 0.890     | 0.637  | 0.742 | 1.6%                |
+| Isolation Forest | 0.861   | -         | -      | -     | -                   |
+
+| ROC curve | Error distribution |
+|-----------|--------------------|
+| ![ROC](./assets/roc_curve.png) | ![Errors](./assets/error_distribution.png) |
+
+### Detection rate per attack type
+
+| Attack type | Test flows | Detected |
+|-------------|-----------:|---------:|
+| DoS Hulk | 34,681 | 88.9% |
+| DDoS | 25,632 | 83.1% |
+| DoS slowloris | 1,101 | 61.1% |
+| DoS GoldenEye | 1,968 | 33.8% |
+| DoS Slowhttptest | 986 | 31.7% |
+| Web Attack – Brute Force | 313 | 4.2% |
+| Web Attack – XSS | 119 | 2.5% |
+| Bot | 384 | 2.3% |
+| PortScan | 18,186 | 2.0% |
+| FTP-Patator | 1,129 | 0.9% |
+| SSH-Patator | 635 | 0.0% |
+
+Heartbleed (3 flows), Infiltration (6 flows) and Web Attack – SQL Injection (5 flows) are too rare in the test set to draw any conclusion.
+
+**Takeaway:** the model is strong on volumetric attacks (DoS/DDoS) but almost blind to low-volume, protocol-conformant attacks (port scans, brute force, bots), because their individual flows look like benign traffic. PortScan alone accounts for more than half of the missed attacks. A single-flow reconstruction error cannot see these patterns; detecting them requires aggregating flows over time or using a supervised model.
+
+## ⚠️ Limitations
+
+* Reconstruction error is a *generic* anomaly signal: attacks that look statistically close to benign traffic are missed (see the per-attack table above).
+* Evaluated on a single dataset with a random split. A temporal or cross-dataset split (e.g. CSE-CIC-IDS2018) would be a more realistic test.
+* The demo scores 50 real held-out flows stored in `back-end/samples.json`; it is not a live packet-capture pipeline.
 
 ## 🚀 Features
 
-* **Unsupervised Learning:** Capable of detecting unknown (Zero-Day) attacks without needing labeled attack data during training.
-* **Real-time API:** A fast and lightweight backend powered by FastAPI.
-* **Interactive Dashboard:** A modern UI built with React and Tailwind CSS to simulate and monitor network traffic.
-* **Fully Containerized:** Easy to deploy and run anywhere using Docker.
+* **Real-traffic demo:** the dashboard scores real held-out flows and reveals the ground truth, including misses and false alarms.
+* **Typed REST API** (FastAPI) with single, batch and simulation endpoints.
+* **Automated tests** (pytest).
+* **Containerized** with Docker Compose, healthchecks and a non-root backend image.
 
-## 📊 Model Performance
+## 🛠️ Tech stack
 
-The training process and metrics were tracked using **Weights & Biases (W&B)**. The model converged quickly and achieved a **ROC AUC Score of ~0.80** on the test dataset.
-
-![Model Performance](./assets/model_performance.png)
-
-> *Training loss curve showing the rapid convergence of the Autoencoder.*
-
-## 🛠️ Tech Stack
-
-* **Machine Learning:** PyTorch, Scikit-learn, Pandas, W&B
-* **Backend:** FastAPI, Uvicorn, Python 3.10
-* **Frontend:** React, Vite, TailwindCSS, Framer Motion
+* **ML:** PyTorch, scikit-learn, pandas, Weights & Biases (optional)
+* **Backend:** FastAPI, Uvicorn, Pydantic v2
+* **Frontend:** React, Vite, Tailwind CSS, Framer Motion
 * **DevOps:** Docker, Docker Compose
 
-## 🐳 Getting Started
+## 🐳 Getting started
 
-You can run the entire system (Frontend + Backend) with a single command using Docker.
-
-### Prerequisites
-* [Docker](https://www.docker.com/) and Docker Compose installed on your machine.
-
-### Installation & Run
-
-**Step 1:** Clone the repository
 ```bash
 git clone https://github.com/Djilali-77/AI-Powered-IDS.git
-cd ai-powered-ids
+cd AI-Powered-IDS
+docker compose up --build -d
 ```
 
-**Step 2:** Build and start the containers
+* Dashboard: http://localhost:3000
+* API docs (Swagger): http://localhost:8000/docs
+
+Stop with `docker compose down`.
+
+## 🔁 Retrain the model
+
 ```bash
-docker-compose up --build -d
+python -m venv venv && source venv/bin/activate
+pip install -r requirements-train.txt
+python train_model.py --download      # needs ~/.kaggle/kaggle.json
+# optional: --wandb, --epochs 100 --patience 8, --latent-dim 8
 ```
 
-**Step 3:** Access the applications
-* **Frontend Dashboard:** http://localhost:3000
-* **Backend API Docs (Swagger):** http://localhost:8000/docs
+This regenerates `back-end/autoencoder.pth`, `scaler.pkl`, `model_config.json`, `samples.json` and the plots/metrics in `assets/`.
 
-## 🛑 Stopping the containers
+## 🔌 API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Liveness check |
+| GET | `/model-info` | Threshold, input size, test metrics |
+| POST | `/predict` | Score one flow (raw features) |
+| POST | `/predict/batch` | Score up to 1000 flows |
+| GET | `/simulate/{benign\|attack}` | Score a random real test flow and return its ground truth |
+
+## 🧪 Tests
+
 ```bash
-docker-compose down
+cd back-end
+pip install -r requirements-dev.txt
+pytest
 ```
+
+## 🗺️ Roadmap
+
+* Aggregate flows over time windows to catch port scans and brute force
+* Compare with a Variational Autoencoder and a supervised baseline
+* Cross-dataset evaluation (CSE-CIC-IDS2018)
+* Live flow extraction (CICFlowMeter) for near real-time scoring
+
+## 📚 Dataset
+
+Sharafaldin, I., Lashkari, A. H., Ghorbani, A. A. *Toward Generating a New Intrusion Detection Dataset and Intrusion Traffic Characterization*, ICISSP 2018.
 
 ## 📝 License
-This project is for academic and demonstration purposes.
+
+For academic and demonstration purposes.
