@@ -13,6 +13,10 @@ An unsupervised network intrusion detection system built around a PyTorch **auto
 
 > The API runs on a free tier and sleeps when idle, so the first request can take around 50 seconds. The dashboard shows a "waking up" message while it starts.
 
+
+![Dashboard demo](./assets/demo.png)
+
+
 ## 🧠 How it works
 
 ```mermaid
