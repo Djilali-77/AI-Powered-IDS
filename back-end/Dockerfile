@@ -1,8 +1,9 @@
 FROM python:3.10-slim
 
-WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# On a supprimé le apt-get update et build-essential !
+WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
@@ -10,6 +11,14 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY . .
 
+# Run as a non-root user (security best practice)
+RUN useradd --create-home appuser && chown -R appuser /app
+USER appuser
+
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+# Platforms like Render inject $PORT; default to 8000 locally
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -1,18 +1,22 @@
-version: '3.8'
-
 services:
   backend:
     build: ./back-end
     container_name: ids-backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./back-end:/app
+    environment:
+      ALLOWED_ORIGINS: "http://localhost:3000"
+    restart: unless-stopped
 
   frontend:
-    build: ./front-end
+    build:
+      context: ./front-end
+      args:
+        VITE_API_URL: http://localhost:8000
     container_name: ids-frontend
     ports:
       - "3000:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
