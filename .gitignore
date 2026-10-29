@@ -1,19 +1,23 @@
-# Environments and Logs
+# Environments and logs
 venv/
+.venv/
 wandb/
+.env
+.DS_Store
 
 # Node / Frontend
 node_modules/
 
-# Python Cache
+# Python cache
 __pycache__/
-*/__pycache__/
+*.pyc
+.pytest_cache/
 
-# Data and Models
+# Data and models
 dataset/
 *.pth
 *.pkl
 
-# === EXCEPTIONS (Fichiers autorisés pour Render) ===
+# Exceptions: artifacts needed by the API (Docker / Render)
 !back-end/autoencoder.pth
 !back-end/scaler.pkl
