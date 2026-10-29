@@ -5,11 +5,13 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=black)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
+![CI](https://github.com/Djilali-77/AI-Powered-IDS/actions/workflows/ci.yml/badge.svg)
 
 An unsupervised network intrusion detection system built around a PyTorch **autoencoder**. It was developed as a complementary study during an immersion internship at **Algérie Télécom**, exploring proactive security for modern telecom infrastructures (e.g. FTTH networks).
 
-<!-- Add your live demo link here -->
-<!-- **Live demo:** https://your-demo-url -->
+**🔗 Live demo:** https://ai-powered-ids.vercel.app
+
+> The API runs on a free tier and sleeps when idle, so the first request can take around 50 seconds. The dashboard shows a "waking up" message while it starts.
 
 ## 🧠 How it works
 
